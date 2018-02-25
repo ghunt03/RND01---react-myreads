@@ -7,7 +7,8 @@ import ListBooks from "./ListBooks";
 
 class App extends Component {
   state = {
-    books: []
+    books: [],
+    queryResults: []
   };
 
   componentDidMount() {
@@ -17,11 +18,22 @@ class App extends Component {
   }
 
   updateBook = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(() =>{
+    BooksAPI.update(book, shelf).then(() => {
       BooksAPI.getAll().then(books => {
         this.setState({ books: books });
       });
-    })
+    });
+  };
+
+  queryBooks = query => {
+    if (query.length > 0) {
+      BooksAPI.search(query).then(books => {
+        this.setState({ queryResults: books });
+      });
+    } else {
+      this.setState({ queryResults: []})
+    }
+    
   };
 
   render() {
@@ -37,7 +49,16 @@ class App extends Component {
             />
           )}
         />
-        <Route path="/search" render={() => <SearchPage />} />
+        <Route
+          path="/search"
+          render={() => (
+            <SearchPage
+              queryResults={this.state.queryResults}
+              onUpdateBook={this.updateBook}
+              onQueryUpdate={this.queryBooks}
+            />
+          )}
+        />
       </div>
     );
   }
