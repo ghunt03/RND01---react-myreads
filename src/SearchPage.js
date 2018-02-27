@@ -7,13 +7,13 @@ class SearchPage extends Component {
     query: ""
   };
 
+  /**
+   * @description Updates the state and calls the query function in the parent component
+   * @param {string} query - The name of the new shelf that the book is been moved to
+   */
   updateQuery = query => {
-    this.setState({ query: query.trim() });
+    this.setState({ query: query });
     this.props.onQueryUpdate(this.state.query);
-  };
-
-  clearQuery = () => {
-    this.setState({ query: "" });
   };
 
   render() {

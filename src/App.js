@@ -17,6 +17,11 @@ class App extends Component {
     });
   }
 
+  /**
+   * @description Calls the API to update the shelf for the book
+   * @param {object} book - The book that needs to be updated
+   * @param {string} shelf - The name of the new shelf
+   */
   updateBook = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
       BooksAPI.getAll().then(books => {
@@ -25,15 +30,22 @@ class App extends Component {
     });
   };
 
+  /**
+   * @description Calls the API to search for new books based on the query
+   * @param {string} query - The term to find in the books
+   */
   queryBooks = query => {
     if (query.length > 0) {
       BooksAPI.search(query).then(books => {
-        this.setState({ queryResults: books });
+        if (books.length > 0) {
+          this.setState({ queryResults: books });
+        } else {
+          this.setState({ queryResults: [] });
+        }
       });
     } else {
-      this.setState({ queryResults: []})
+      this.setState({ queryResults: [] });
     }
-    
   };
 
   render() {
@@ -43,10 +55,12 @@ class App extends Component {
           exact
           path="/"
           render={() => (
-            <ListBooks
-              books={this.state.books}
-              onUpdateBook={this.updateBook}
-            />
+            <div>
+              <ListBooks
+                books={this.state.books}
+                onUpdateBook={this.updateBook}
+              />
+            </div>
           )}
         />
         <Route

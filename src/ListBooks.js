@@ -1,16 +1,26 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Bookshelf from "./Bookshelf";
+
+
+/**
+ * @description Class for ListBooks compnent for holding each of the bookshelves
+ */
 class ListBooks extends Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    onUpdateBook: PropTypes.func.isRequired
+  };
+
+
   render() {
     const { books, onUpdateBook } = this.props;
-
-    const currentlyReadingBooks = books.filter(
-      book => book.shelf === "currentlyReading"
-    );
-
-    const wantToReadBooks = books.filter(book => book.shelf === "wantToRead");
-    const readBooks = books.filter(book => book.shelf === "read");
+    const shelves = [
+      { id: "currentlyReading", title: "Currently Reading" },
+      { id: "wantToRead", title: "Want to Read" },
+      { id: "read", title: "Read" }
+    ];
 
     return (
       <div className="list-books">
@@ -19,13 +29,14 @@ class ListBooks extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            <Bookshelf
-              title="Currently Reading"
-              books={currentlyReadingBooks}
-              onUpdateBook={onUpdateBook}
-            />
-            <Bookshelf title="Want To Read" books={wantToReadBooks} onUpdateBook={onUpdateBook}/>
-            <Bookshelf title="Read" books={readBooks} onUpdateBook={onUpdateBook}/>
+            {shelves.map(shelf => (
+              <Bookshelf
+                key={shelf.id}
+                title={shelf.title}
+                books={books.filter(book => book.shelf === shelf.id)}
+                onUpdateBook={onUpdateBook}
+              />
+            ))}
           </div>
         </div>
         <div className="open-search">
