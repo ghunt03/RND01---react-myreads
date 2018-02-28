@@ -24,10 +24,10 @@ class App extends Component {
    */
   updateBook = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      book.shelf = shelf
+      book.shelf = shelf;
       this.setState(state => ({
-        books: state.books.filter(b => b.id !== book.id).concat([ book ])
-      }))
+        books: state.books.filter(b => b.id !== book.id).concat([book])
+      }));
     });
   };
 
@@ -37,12 +37,18 @@ class App extends Component {
    */
   queryBooks = query => {
     if (query.length > 0) {
-      BooksAPI.search(query).then(books => {
-        if (books.length > 0) {
-          this.setState({ queryResults: books });
-        } else {
-          this.setState({ queryResults: [] });
-        }
+      const { books } = this.state;
+      BooksAPI.search(query).then(results => {
+        const queryResults =
+          results.length > 0
+            ? results.map(result => {
+                const bookFromShelf = books.find(
+                  book => book.id === result.id
+                );
+                return bookFromShelf || result;
+              })
+            : [];
+        this.setState({ queryResults });
       });
     } else {
       this.setState({ queryResults: [] });

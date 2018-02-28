@@ -19,6 +19,9 @@ class SearchPage extends Component {
   render() {
     const { queryResults, onUpdateBook } = this.props;
     const { query } = this.state;
+    
+
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
