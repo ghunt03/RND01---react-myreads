@@ -42,7 +42,7 @@ class Book extends Component {
                   width: 128,
                   height: 193,
                   backgroundImage: `url(${
-                    book.imageLinks ? book.imageLinks.thumbnail : ""
+                    book.imageLinks ? book.imageLinks.thumbnail : "http://via.placeholder.com/128x193?text=No%20Cover"
                   })`
                 }}
               />

@@ -13,7 +13,7 @@ class App extends Component {
 
   componentDidMount() {
     BooksAPI.getAll().then(books => {
-      this.setState({ books: books });
+      this.setState({ books });
     });
   }
 
@@ -24,9 +24,10 @@ class App extends Component {
    */
   updateBook = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      BooksAPI.getAll().then(books => {
-        this.setState({ books: books });
-      });
+      book.shelf = shelf
+      this.setState(state => ({
+        books: state.books.filter(b => b.id !== book.id).concat([ book ])
+      }))
     });
   };
 
